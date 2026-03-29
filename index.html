@@ -641,25 +641,27 @@
      ★  CONFIGURATION – UPDATE ONLY THIS SECTION
   ---------------------------------------------------------------- */
 
-  // ① Correct school code (single string)
-  const VALID_SCHOOL_CODE = "17001";
+  // ① Map school codes to their valid roll numbers
+  const SCHOOL_CODES = {
+    "17001": ["2819770", "7654321"],
+    "17034": ["2651809"]
+  };
 
-  // ② Valid roll numbers (array – add/remove as needed)
-  const VALID_ROLL_NUMBERS = ["2819770", "7654321"];
-
-  // ③ Result image paths mapped to roll numbers
+  // ② Result image paths mapped to roll numbers
   //    Replace file paths with real paths once you have the images.
   //    e.g., "images/result_1234567.jpg"
   const RESULT_IMAGES = {
     "2819770": "result1.jpeg",
-    "7654321": "result2.jpg"
+    "7654321": "result2.jpg",
+    "2651809": "result2.png"
   };
 
-  // ④ PDF file paths mapped to roll numbers
+  // ③ PDF file paths mapped to roll numbers
   //    e.g., "pdfs/result_1234567.pdf"
   const RESULT_PDFS = {
     "2819770": "result1.pdf",
-    "7654321": "result2.pdf"
+    "7654321": "result2.pdf",
+    "2651809": "result2.pdf"
   };
 
   /* ----------------------------------------------------------------
@@ -687,7 +689,7 @@
       return;
     }
 
-    if (entered.toUpperCase() !== VALID_SCHOOL_CODE.toUpperCase()) {
+    if (!SCHOOL_CODES[entered]) {
       errMsg.textContent = "❌ Wrong School Code. Please try again.";
       errMsg.style.display = "block";
       input.select();
@@ -727,7 +729,7 @@
       return;
     }
 
-    if (!VALID_ROLL_NUMBERS.includes(entered)) {
+    if (!RESULT_IMAGES[entered]) {
       errMsg.textContent = "❌ Invalid Roll Number. Please check and try again.";
       errMsg.style.display = "block";
       input.select();
