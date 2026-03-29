@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RBSE Result Portal – Board of Secondary Education, Rajasthan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES – change colours here for the whole portal
+    ============================================================ */
+    :root {
+      --blue-dark:   #003580;
+      --blue-mid:    #0050a0;
+      --blue-light:  #1a6fc4;
+      --blue-accent: #0084d6;
+      --beige-bg:    #f5f0e8;
+      --beige-card:  #fffdf7;
+      --border:      #c8bfa8;
+      --text-dark:   #1a1a2e;
+      --text-mid:    #3a3a5c;
+      --text-light:  #666680;
+      --red:         #c0392b;
+      --green:       #1a7a3c;
+      --gold:        #c9a227;
+      --sidebar-w:   220px;
+      --header-h:    90px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background: var(--beige-bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- HEADER ---- */
+    #site-header {
+      background: var(--blue-dark);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      min-height: var(--header-h);
+      border-bottom: 4px solid var(--gold);
+    }
+
+    #site-header .emblem {
+      width: 68px;
+      height: 68px;
+      flex-shrink: 0;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      text-align: center;
+      padding: 6px;
+      line-height: 1.2;
+      border: 3px solid var(--gold);
+    }
+
+    #site-header .header-text h1 {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.35rem;
+      color: #fff;
+      letter-spacing: .5px;
+    }
+    #site-header .header-text h2 {
+      font-size: .85rem;
+      color: #b8cfe8;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* ---- NAV ---- */
+    nav#main-nav {
+      background: var(--blue-mid);
+      border-bottom: 3px solid var(--blue-accent);
+      overflow-x: auto;
+    }
+    nav#main-nav ul {
+      list-style: none;
+      display: flex;
+      white-space: nowrap;
+    }
+    nav#main-nav ul li a {
+      display: block;
+      padding: 10px 14px;
+      color: #ddeeff;
+      text-decoration: none;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+      transition: background .2s, color .2s;
+    }
+    nav#main-nav ul li a:hover {
+      background: var(--blue-light);
+      color: #fff;
+    }
+    nav#main-nav ul li.active a {
+      background: var(--gold);
+      color: var(--blue-dark);
+    }
+
+    /* ---- LAYOUT ---- */
+    #layout {
+      display: flex;
+      flex: 1;
+      gap: 0;
+    }
+
+    /* ---- SIDEBAR ---- */
+    #sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: #e8e0d0;
+      border-right: 1px solid var(--border);
+      padding: 0 0 24px 0;
+    }
+    #sidebar .sidebar-title {
+      background: var(--blue-dark);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 8px 14px;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+    #sidebar ul { list-style: none; }
+    #sidebar ul li a {
+      display: block;
+      padding: 7px 14px;
+      font-size: .78rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      border-bottom: 1px solid #d4cabb;
+      transition: background .15s;
+    }
+    #sidebar ul li a:hover { background: #d4cabb; }
+    #sidebar ul li a::before { content: "» "; color: var(--blue-light); }
+
+    /* ---- MAIN CONTENT ---- */
+    #main-content {
+      flex: 1;
+      padding: 24px 28px;
+      min-width: 0;
+    }
+
+    /* ticker / marquee */
+    .ticker-bar {
+      background: var(--blue-dark);
+      color: #ffd;
+      font-size: .78rem;
+      padding: 5px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-radius: 3px;
+      margin-bottom: 16px;
+    }
+    .ticker-bar span {
+      display: inline-block;
+      animation: marquee 30s linear infinite;
+      padding-left: 100%;
+    }
+    @keyframes marquee { to { transform: translateX(-100%); } }
+
+    /* live badge */
+    .live-heading {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.55rem;
+      color: var(--blue-dark);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--red);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 30px;
+      letter-spacing: .6px;
+      animation: pulse-badge 1.5s ease-in-out infinite;
+    }
+    .live-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: #fff;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    @keyframes pulse-badge {
+      0%,100% { opacity: 1; }
+      50%      { opacity: .6; }
+    }
+
+    /* ---- FORM CARD ---- */
+    .result-card {
+      background: var(--beige-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px 32px;
+      margin-top: 20px;
+      max-width: 520px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+    .result-card h3 {
+      font-family: 'Noto Serif', serif;
+      font-size: 1.1rem;
+      color: var(--blue-dark);
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    /* steps */
+    .step { display: none; }
+    .step.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+    .step-indicator {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      background: #ddd;
+      color: #888;
+      transition: background .3s, color .3s;
+    }
+    .step-dot.done  { background: var(--green); color: #fff; }
+    .step-dot.active{ background: var(--blue-mid); color: #fff; }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: #ddd;
+      align-self: center;
+      transition: background .3s;
+    }
+    .step-line.done { background: var(--green); }
+
+    label.field-label {
+      display: block;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      font-size: .9rem;
+      font-family: 'Noto Sans', sans-serif;
+      background: #fff;
+      color: var(--text-dark);
+      transition: border-color .2s;
+      outline: none;
+    }
+    input[type="text"]:focus { border-color: var(--blue-accent); }
+
+    .btn-submit {
+      margin-top: 14px;
+      background: var(--blue-dark);
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      font-size: .88rem;
+      font-weight: 700;
+      font-family: 'Noto Sans', sans-serif;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: .4px;
+      transition: background .2s, transform .1s;
+    }
+    .btn-submit:hover  { background: var(--blue-light); }
+    .btn-submit:active { transform: scale(.97); }
+
+    .error-msg {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #fce8e6;
+      border-left: 4px solid var(--red);
+      color: var(--red);
+      font-size: .82rem;
+      border-radius: 3px;
+      display: none;
+    }
+    .success-msg {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #e6f4ea;
+      border-left: 4px solid var(--green);
+      color: var(--green);
+      font-size: .82rem;
+      border-radius: 3px;
+      display: none;
+    }
+
+    /* ---- RESULT PAGE ---- */
+    #result-view { display: none; }
+    #result-view.active { display: block; animation: fadeIn .4s ease; }
+
+    .result-header-strip {
+      background: var(--blue-dark);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 6px 6px 0 0;
+      font-family: 'Noto Serif', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: .4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .result-body {
+      background: var(--beige-card);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      padding: 24px;
+    }
+
+    .result-image-wrap {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .result-image-wrap img {
+      max-width: 100%;
+      border: 3px solid var(--border);
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+    }
+
+    /* placeholder image when real images aren't present */
+    .img-placeholder {
+      width: 100%;
+      max-width: 580px;
+      height: 340px;
+      background: linear-gradient(135deg, #e8f0fc 0%, #d0e4f7 100%);
+      border: 3px solid var(--border);
+      border-radius: 4px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--blue-mid);
+      font-size: .85rem;
+    }
+    .img-placeholder .icon { font-size: 3rem; }
+    .img-placeholder .caption { font-weight: 700; font-size: 1rem; }
+    .img-placeholder .sub { color: var(--text-light); font-size: .78rem; }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green);
+      color: #fff;
+      padding: 11px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: .9rem;
+      font-weight: 700;
+      font-family: 'Noto Sans', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .1s;
+    }
+    .btn-download:hover  { background: #145c2e; }
+    .btn-download:active { transform: scale(.97); }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--blue-dark);
+      border: 1.5px solid var(--blue-dark);
+      padding: 9px 20px;
+      border-radius: 4px;
+      font-size: .88rem;
+      font-weight: 600;
+      font-family: 'Noto Sans', sans-serif;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-back:hover { background: var(--blue-dark); color: #fff; }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    /* ---- INFO TABLE ---- */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      font-size: .85rem;
+    }
+    .info-table th, .info-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .info-table th {
+      background: #e8e0d0;
+      font-weight: 700;
+      color: var(--blue-dark);
+      width: 38%;
+    }
+    .info-table td { background: #fff; }
+
+    /* ---- FOOTER ---- */
+    footer#site-footer {
+      background: var(--blue-dark);
+      color: #a0b8d0;
+      text-align: center;
+      padding: 14px 20px;
+      font-size: .75rem;
+      line-height: 1.7;
+      border-top: 3px solid var(--gold);
+    }
+    footer#site-footer a { color: #8fc4e8; text-decoration: none; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      #layout { flex-direction: column; }
+      #sidebar { width: 100%; }
+      #main-content { padding: 16px; }
+      .live-heading { font-size: 1.15rem; }
+      .result-card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     HEADER
+================================================================ -->
+<header id="site-header">
+  <div class="emblem">RBSE<br>राज.<br>माशि.बो.</div>
+  <div class="header-text">
+    <h1>Board of Secondary Education, Rajasthan</h1>
+    <h2>राजस्थान माध्यमिक शिक्षा बोर्ड, अजमेर &nbsp;|&nbsp; Official Result Portal</h2>
+  </div>
+</header>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav id="main-nav">
+  <ul>
+    <li class="active"><a href="#">Home</a></li>
+    <li><a href="#">Property Declaration</a></li>
+    <li><a href="#">Downloads</a></li>
+    <li><a href="#">Duplicate Documents / Corrections</a></li>
+    <li><a href="#">School Affiliation Portals</a></li>
+    <li><a href="#">Accounts</a></li>
+    <li><a href="#">Postal Enquiry</a></li>
+    <li><a href="#">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- ================================================================
+     LAYOUT: SIDEBAR + MAIN
+================================================================ -->
+<div id="layout">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-title">Quick Links</div>
+    <ul>
+      <li><a href="#">10th Result 2026</a></li>
+      <li><a href="#">12th Result 2026</a></li>
+      <li><a href="#">Supplementary Exam</a></li>
+      <li><a href="#">Date Sheet 2026</a></li>
+      <li><a href="#">Admit Card Download</a></li>
+      <li><a href="#">School Affiliation</a></li>
+      <li><a href="#">Migration Certificate</a></li>
+      <li><a href="#">Mark Sheet Correction</a></li>
+      <li><a href="#">Re-checking / Re-evaluation</a></li>
+      <li><a href="#">Scholarship Portal</a></li>
+      <li><a href="#">RTI Information</a></li>
+      <li><a href="#">Tender Notices</a></li>
+      <li><a href="#">Press Releases</a></li>
+      <li><a href="#">RBSE Official Website</a></li>
+      <li><a href="#">Rajasthan Govt. Portal</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+
+    <!-- Ticker -->
+    <div class="ticker-bar">
+      <span>
+        🔔 RBSE 12th Result 2026 has been declared. Students can check their results below. &nbsp;||&nbsp;
+        RBSE 10th Result 2026 expected soon. &nbsp;||&nbsp;
+        For queries contact: rbse-helpdesk@rajasthan.gov.in &nbsp;||&nbsp;
+        Supplementary Exam form filling starts July 2026. &nbsp;||&nbsp;
+        Result Re-checking application window opens after 15 days. &nbsp;||&nbsp;
+      </span>
+    </div>
+
+    <!-- Live heading -->
+    <div class="live-heading">
+      RBSE 12th Result Date 2026
+      <span class="live-badge">LIVE</span>
+    </div>
+    <p style="margin-top:8px;font-size:.85rem;color:var(--text-light);">
+      Enter your school code and roll number to view and download your result.
+    </p>
+
+    <!-- ============================================================
+         FORM CARD (multi-step)
+    ============================================================ -->
+    <div class="result-card" id="form-card">
+
+      <!-- Step indicators -->
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step-dot" id="dot-2">2</div>
+      </div>
+
+      <!-- STEP 1: School Code -->
+      <div class="step active" id="step-1">
+        <h3>Step 1 — Enter School Code</h3>
+        <label class="field-label" for="school-code-input">School Code</label>
+        <input type="text" id="school-code-input" placeholder="e.g. SCH001" autocomplete="off" />
+        <div class="error-msg" id="school-error">❌ Wrong School Code. Please try again.</div>
+        <div class="success-msg" id="school-success">✔ School Code verified successfully.</div>
+        <br/>
+        <button class="btn-submit" onclick="validateSchoolCode()">Verify School Code →</button>
+      </div>
+
+      <!-- STEP 2: Roll Number -->
+      <div class="step" id="step-2">
+        <h3>Step 2 — Enter Roll Number</h3>
+        <label class="field-label" for="roll-input">Roll Number</label>
+        <input type="text" id="roll-input" placeholder="e.g. 1234567" autocomplete="off" />
+        <div class="error-msg" id="roll-error">❌ Invalid Roll Number. Please check and try again.</div>
+        <br/>
+        <button class="btn-submit" onclick="validateRollNumber()">View Result →</button>
+      </div>
+
+    </div><!-- /result-card -->
+
+    <!-- ============================================================
+         RESULT VIEW
+    ============================================================ -->
+    <div id="result-view">
+      <div class="result-header-strip">
+        <span>🎓 RBSE Senior Secondary (Class XII) Result 2026</span>
+        <span id="result-roll-badge" style="font-size:.8rem;font-weight:400;">Roll No: —</span>
+      </div>
+      <div class="result-body">
+
+        <!-- Basic info table -->
+        <table class="info-table">
+          <tr><th>Examination</th><td>Senior Secondary (Class XII) – 2026</td></tr>
+          <tr><th>Board</th><td>Board of Secondary Education, Rajasthan (RBSE)</td></tr>
+          <tr><th>Roll Number</th><td id="tbl-roll">—</td></tr>
+          <tr><th>Result Status</th><td id="tbl-status" style="color:var(--green);font-weight:700;">PASS</td></tr>
+        </table>
+
+        <!-- Result image -->
+        <div class="result-image-wrap" id="result-image-area">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-row">
+          <a class="btn-download" id="pdf-download-link" href="#" download>
+            ⬇ Download Result as PDF
+          </a>
+          <button class="btn-back" onclick="resetPortal()">
+            ← Search Another Roll No.
+          </button>
+        </div>
+
+      </div>
+    </div><!-- /result-view -->
+
+  </main>
+</div>
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer id="site-footer">
+  <p>
+    <strong>Board of Secondary Education, Rajasthan (RBSE) | राजस्थान माध्यमिक शिक्षा बोर्ड</strong><br/>
+    Shiksha Sankul, JLN Marg, Jaipur – 302017 (Rajasthan) | Helpline: 0141-2700872<br/>
+    Website: <a href="#">rajeduboard.rajasthan.gov.in</a> &nbsp;|&nbsp; Email: <a href="#">rbse@rajasthan.gov.in</a><br/>
+    <span style="font-size:.7rem;color:#6a8aaa;">
+      © 2026 RBSE. All Rights Reserved. &nbsp;|&nbsp; Designed &amp; Developed for Official Use Only.
+    </span>
+  </p>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+  /* ----------------------------------------------------------------
+     ★  CONFIGURATION – UPDATE ONLY THIS SECTION
+  ---------------------------------------------------------------- */
+
+  // ① Correct school code (single string)
+  const VALID_SCHOOL_CODE = "17001";
+
+  // ② Valid roll numbers (array – add/remove as needed)
+  const VALID_ROLL_NUMBERS = ["2819770", "7654321"];
+
+  // ③ Result image paths mapped to roll numbers
+  //    Replace file paths with real paths once you have the images.
+  //    e.g., "images/result_1234567.jpg"
+  const RESULT_IMAGES = {
+    "2819770": "result1.jpeg",
+    "7654321": "result2.jpg"
+  };
+
+  // ④ PDF file paths mapped to roll numbers
+  //    e.g., "pdfs/result_1234567.pdf"
+  const RESULT_PDFS = {
+    "2819770": "result1.pdf",
+    "7654321": "result2.pdf"
+  };
+
+  /* ----------------------------------------------------------------
+     State
+  ---------------------------------------------------------------- */
+  let currentRoll = null;
+
+  /* ----------------------------------------------------------------
+     STEP 1 – Validate School Code
+  ---------------------------------------------------------------- */
+  function validateSchoolCode() {
+    const input    = document.getElementById("school-code-input");
+    const errMsg   = document.getElementById("school-error");
+    const okMsg    = document.getElementById("school-success");
+    const entered  = input.value.trim();
+
+    // Reset messages
+    errMsg.style.display = "none";
+    okMsg.style.display  = "none";
+
+    // Empty check
+    if (!entered) {
+      errMsg.textContent = "⚠ Please enter your School Code.";
+      errMsg.style.display = "block";
+      return;
+    }
+
+    if (entered.toUpperCase() !== VALID_SCHOOL_CODE.toUpperCase()) {
+      errMsg.textContent = "❌ Wrong School Code. Please try again.";
+      errMsg.style.display = "block";
+      input.select();
+    } else {
+      okMsg.style.display = "block";
+      // Short delay then advance to step 2
+      setTimeout(() => goToStep2(), 600);
+    }
+  }
+
+  function goToStep2() {
+    document.getElementById("step-1").classList.remove("active");
+    document.getElementById("step-2").classList.add("active");
+
+    // Update step indicators
+    document.getElementById("dot-1").classList.remove("active");
+    document.getElementById("dot-1").classList.add("done");
+    document.getElementById("dot-1").textContent = "✓";
+    document.getElementById("line-1").classList.add("done");
+    document.getElementById("dot-2").classList.add("active");
+  }
+
+  /* ----------------------------------------------------------------
+     STEP 2 – Validate Roll Number
+  ---------------------------------------------------------------- */
+  function validateRollNumber() {
+    const input   = document.getElementById("roll-input");
+    const errMsg  = document.getElementById("roll-error");
+    const entered = input.value.trim();
+
+    errMsg.style.display = "none";
+
+    // Empty check
+    if (!entered) {
+      errMsg.textContent = "⚠ Please enter your Roll Number.";
+      errMsg.style.display = "block";
+      return;
+    }
+
+    if (!VALID_ROLL_NUMBERS.includes(entered)) {
+      errMsg.textContent = "❌ Invalid Roll Number. Please check and try again.";
+      errMsg.style.display = "block";
+      input.select();
+    } else {
+      currentRoll = entered;
+      showResult(entered);
+    }
+  }
+
+  /* ----------------------------------------------------------------
+     Show Result View
+  ---------------------------------------------------------------- */
+  function showResult(roll) {
+    // Hide form card
+    document.getElementById("form-card").style.display  = "none";
+
+    // Populate table
+    document.getElementById("tbl-roll").textContent        = roll;
+    document.getElementById("result-roll-badge").textContent = "Roll No: " + roll;
+
+    // Set image
+    const imgArea = document.getElementById("result-image-area");
+    const imgPath = RESULT_IMAGES[roll];
+    imgArea.innerHTML = buildImageHTML(imgPath, roll);
+
+    // Set PDF link
+    const pdfPath = RESULT_PDFS[roll];
+    const pdfLink = document.getElementById("pdf-download-link");
+    pdfLink.href       = pdfPath;
+    pdfLink.setAttribute("download", "RBSE_Result_" + roll + ".pdf");
+
+    // Show result view
+    const rv = document.getElementById("result-view");
+    rv.classList.add("active");
+
+    // Scroll into view smoothly
+    rv.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /* Build image HTML – shows the actual image from the specified path */
+  function buildImageHTML(imgPath, roll) {
+    return `
+      <img src="${imgPath}" alt="Result for Roll No ${roll}" />
+    `;
+  }
+
+  /* ----------------------------------------------------------------
+     Reset – go back to beginning
+  ---------------------------------------------------------------- */
+  function resetPortal() {
+    currentRoll = null;
+
+    // Reset inputs
+    document.getElementById("school-code-input").value = "";
+    document.getElementById("roll-input").value         = "";
+
+    // Hide messages
+    ["school-error","school-success","roll-error"].forEach(id => {
+      document.getElementById(id).style.display = "none";
+    });
+
+    // Reset step indicators
+    document.getElementById("dot-1").classList.remove("done");
+    document.getElementById("dot-1").classList.add("active");
+    document.getElementById("dot-1").textContent = "1";
+    document.getElementById("line-1").classList.remove("done");
+    document.getElementById("dot-2").classList.remove("active");
+
+    // Reset steps
+    document.getElementById("step-2").classList.remove("active");
+    document.getElementById("step-1").classList.add("active");
+
+    // Show form, hide result
+    document.getElementById("form-card").style.display = "";
+    document.getElementById("result-view").classList.remove("active");
+
+    // Scroll up
+    document.getElementById("form-card").scrollIntoView({ behavior: "smooth" });
+  }
+
+  /* ----------------------------------------------------------------
+     Allow Enter key to submit forms
+  ---------------------------------------------------------------- */
+  document.getElementById("school-code-input").addEventListener("keydown", e => {
+    if (e.key === "Enter") validateSchoolCode();
+  });
+  document.getElementById("roll-input").addEventListener("keydown", e => {
+    if (e.key === "Enter") validateRollNumber();
+  });
+</script>
+
+</body>
+</html>
